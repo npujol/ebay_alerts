@@ -1,2 +1,2 @@
 # ebay_alerts
-Small website to check ebay alert
+A small app to check the search on ebay
