@@ -1,0 +1,30 @@
+# @format
+
+version: "3"
+
+services:
+  database:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  web:
+    image: myproject
+    build: .
+    command: bash -c "python /code/manage.py migrate --noinput && gunicorn ebay_alerts.wsgi:application --bind 0.0.0.0:8000 --reload"
+    volumes:
+      - .:/code
+    links:
+      - database
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ./media:/media
+    links:
+      - web
