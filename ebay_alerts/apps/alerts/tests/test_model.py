@@ -11,21 +11,14 @@ class TestAlertModel(TestCase):
     @given(from_model(Alert, owner=from_model(Account)))
     def test_is_alert(self, alert):
         self.assertIsInstance(alert, Alert)
-        self.assertIsNotNone(alert.id)
+        self.assertIsNotNone(alert.uuid)
         self.assertIsNotNone(alert.search_term)
         self.assertIsNotNone(alert.owner)
         self.assertIsNotNone(alert.interval_time)
 
     @given(from_model(Alert, owner=from_model(Account)))
     def test_can_get_a_alert(self, alert):
-        assert alert.id
-
-    def test_create_a_alert_without_an_existent_account(self):
-        email = "example@gmail.com"
-        alert = Alert.objects.create(
-            owner=email, search_term="test term", interval_time="30"
-        )
-        assert alert.owner, email
+        assert alert.uuid
 
     @given(from_model(Account))
     def test_create_a_alert_with_an_account(self, account):
@@ -43,18 +36,18 @@ class TestAccountModel(TestCase):
     @given(from_model(Account))
     def test_is_account(self, account):
         self.assertIsInstance(account, Account)
-        self.assertIsNotNone(account.id)
+        self.assertIsNotNone(account.uuid)
         self.assertIsNotNone(account.email)
         self.assertIsNotNone(account.alerts)
 
     @given(from_model(Account))
     def test_can_get_a_account(self, account):
-        assert account.id
+        assert account.uuid
 
     @settings(suppress_health_check=HealthCheck.all(), verbosity=Verbosity.quiet)
     @given(lists(from_model(Account)))
     def test_can_get_multiple_models_with_unique_field(self, accounts):
         assume(len(accounts) > 1)
         for a in accounts:
-            self.assertIsNotNone(a.id)
-        assert len({a.id for a in accounts}), len({a.email for a in accounts})
+            self.assertIsNotNone(a.uuid)
+        assert len({a.uuid for a in accounts}), len({a.email for a in accounts})
