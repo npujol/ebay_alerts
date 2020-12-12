@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Account(models.Model):
-    id = models.UUIDField(
+    uuid = models.UUIDField(
         primary_key=True, unique=True, default=uuid.uuid4, editable=False
     )
     email = models.EmailField(
@@ -17,19 +17,13 @@ class Account(models.Model):
             return self.email
 
 
-class AlertManager(models.Manager):
-    def create(self, **obj_data):
-        obj_data["owner"], _ = Account.objects.get_or_create(email=obj_data["owner"])
-        return super().create(**obj_data)
-
-
 class Alert(models.Model):
     class IntervalOfTime(models.TextChoices):
         TWO = "2", "2 minutes"
         TEN = "10", "10 minutes"
         THIRTY = "30", "30 minutes"
 
-    id = models.UUIDField(
+    uuid = models.UUIDField(
         primary_key=True, unique=True, default=uuid.uuid4, editable=False
     )
     owner = models.ForeignKey(
@@ -45,7 +39,6 @@ class Alert(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    objects = AlertManager()
 
     class Meta:
         unique_together = [["search_term", "interval_time"]]
