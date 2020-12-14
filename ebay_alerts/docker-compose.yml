@@ -10,13 +10,26 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   web:
-    image: myproject
+    image: ebay_alerts
     build: .
     command: bash -c "python /code/manage.py migrate --noinput && gunicorn ebay_alerts.wsgi:application --bind 0.0.0.0:8000 --reload"
     volumes:
       - .:/code
     links:
       - database
+      - redis
+
+  redis:
+    image: redis:alpine
+
+  worker:
+    image: ebay_alerts
+    restart: "no"
+    command: celery -A ebay_alerts worker
+    volumes:
+      - .:/code
+    links:
+      - redis
 
   nginx:
     build:
