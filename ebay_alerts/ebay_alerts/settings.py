@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "drf_yasg",
+    
     "apps.alerts.apps.AlertsConfig",
 ]
 
@@ -143,3 +145,5 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
+
+SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False}
