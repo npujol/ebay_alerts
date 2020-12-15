@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 
 from rest_framework.permissions import AllowAny
@@ -5,7 +6,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Alert, Account
-from .serializers import AlertSerializer
+from .serializers import AlertSerializer, AlertsListSerializer
+from .emails import send_email_to_delete_a_alert
 
 
 class AlertViewSet(viewsets.ModelViewSet):
@@ -31,15 +33,12 @@ class AlertViewSet(viewsets.ModelViewSet):
     queryset = Alert.objects.all()
     lookup_field = "uuid"
 
+    def get_serializer_class(self):
+        if self.action == "list":
+            return AlertsListSerializer
+        return AlertSerializer
+
     def list(self, request, *args, **kwargs):
-        email = self.request.query_params.get("email", None)
+        email = self.request.data["email"]
         self.queryset = self.queryset.filter(owner__email=email)
-
         return super().list(self, request, *args, **kwargs)
-
-    @action(detail=True, methods=["post"], url_name="delete")
-    def delete(self, request, uuid=None):
-        return Response(
-            {"message": "we will send you an email."},
-            status=status.HTTP_202_ACCEPTED,
-        )
