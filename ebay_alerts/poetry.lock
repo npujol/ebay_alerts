@@ -199,6 +199,17 @@ argon2 = ["argon2-cffi (>=16.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-celery-results"
+version = "2.0.0"
+description = "Celery result backends for Django."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+celery = ">=4.4,<6.0"
+
+[[package]]
 name = "django-environ"
 version = "0.4.5"
 description = "Django-environ allows you to utilize 12factor inspired environment variables to configure your Django application."
@@ -525,7 +536,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "74c62689971ddb9ebe3b72ee69e730e5f4bda0752b599d31165991384b9f7aeb"
+content-hash = "dcbe421a7dc13f2610059be76b8fac06932d08df954991428acba927e57061d9"
 
 [metadata.files]
 amqp = [
@@ -582,6 +593,10 @@ coreschema = [
 django = [
     {file = "Django-3.1.4-py3-none-any.whl", hash = "sha256:5c866205f15e7a7123f1eec6ab939d22d5bde1416635cab259684af66d8e48a2"},
     {file = "Django-3.1.4.tar.gz", hash = "sha256:edb10b5c45e7e9c0fb1dc00b76ec7449aca258a39ffd613dbd078c51d19c9f03"},
+]
+django-celery-results = [
+    {file = "django_celery_results-2.0.0-py2.py3-none-any.whl", hash = "sha256:f82280a9a25c44048b9e64ae4d47ade7d522c8221304b0e25388080021b95468"},
+    {file = "django_celery_results-2.0.0.tar.gz", hash = "sha256:754e01f22f70fddee5f2ca95c18f183fccee42ad98f9803577bffa717d45ac5d"},
 ]
 django-environ = [
     {file = "django-environ-0.4.5.tar.gz", hash = "sha256:6c9d87660142608f63ec7d5ce5564c49b603ea8ff25da595fd6098f6dc82afde"},
