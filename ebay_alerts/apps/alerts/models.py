@@ -41,7 +41,7 @@ class Alert(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = [["search_term", "interval_time"]]
+        unique_together = [["search_term", "interval_time", "owner"]]
         ordering = ["updated_at"]
 
         def __str__(self):

@@ -12,7 +12,7 @@ services:
   web:
     image: ebay_alerts
     build: .
-    command: bash -c "python /code/manage.py migrate --noinput && gunicorn ebay_alerts.wsgi:application --bind 0.0.0.0:8000 --reload"
+    command: bash -c "python /code/manage.py migrate --noinput && gunicorn ebay_alerts.wsgi:application --bind 0.0.0.0:8000 --reload -t300"
     volumes:
       - .:/code
     links:
@@ -21,6 +21,8 @@ services:
 
   redis:
     image: redis:alpine
+    ports: 
+      - 6379:6379
 
   worker:
     image: ebay_alerts
@@ -29,7 +31,8 @@ services:
     volumes:
       - .:/code
     links:
-      - redis
+      - redis 
+      - database
 
   nginx:
     build:
