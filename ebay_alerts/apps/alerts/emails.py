@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail, EmailMessage
-from ebay_alerts.settings import EMAIL_HOST_USER
+from django.conf import settings
 from django.urls import reverse
 from .models import Alert
 
@@ -17,7 +17,7 @@ def send_email_to_delete_a_alert(email, uuid=None):
     send_mail(
         "Alert delete",
         message,
-        EMAIL_HOST_USER,
+        settings.EMAIL_HOST_USER,
         [email],
         fail_silently=False,
     )
@@ -34,7 +34,7 @@ def send_email_after_create(email, uuid=None):
     send_mail(
         "New alert was created.",
         message,
-        EMAIL_HOST_USER,
+        settings.EMAIL_HOST_USER,
         [email],
         fail_silently=False,
     )
@@ -45,7 +45,7 @@ def send_email_with_ebay_answer(email):
     send_mail(
         "Subject here",
         "Here is the message.",
-        EMAIL_HOST_USER,
+        settings.EMAIL_HOST_USER,
         [email],
         fail_silently=False,
     )
