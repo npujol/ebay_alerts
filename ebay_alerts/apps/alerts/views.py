@@ -39,6 +39,7 @@ class AlertViewSet(viewsets.ModelViewSet):
         return AlertSerializer
 
     def list(self, request, *args, **kwargs):
-        email = self.request.data["email"]
-        self.queryset = self.queryset.filter(owner__email=email)
+        email = self.request.query_params.get("email", None)
+        if email:
+            self.queryset = self.queryset.filter(owner__email=email)
         return super().list(self, request, *args, **kwargs)
