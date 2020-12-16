@@ -23,6 +23,7 @@ class AlertAPIViewTestCase(TestCase, APITestCase):
         self.assertEqual(Alert.objects.all().count(), (alerts_count + 1))
         self.assertEqual(Alert.objects.last().owner.email, "test2@email.com")
 
+    @settings(max_examples=1)
     def test_create_alert_without_an_account(self):
         url = reverse("alerts:alert-list")
         alerts_count = Alert.objects.all().count()
@@ -38,6 +39,7 @@ class AlertAPIViewTestCase(TestCase, APITestCase):
         assert Alert.objects.all().count(), alerts_count + 1
         assert Alert.objects.last().owner.email, "test3@email.com"
 
+    @settings(max_examples=1)
     @given(from_model(Account))
     def test_empty_list_for_a_account(self, account):
         url = reverse(
@@ -45,15 +47,16 @@ class AlertAPIViewTestCase(TestCase, APITestCase):
         )
         response = self.client.get(
             url,
-            **{
-                "QUERY_STRING": f"email={account.email}",
+            data={
+                "email": "test3@email.com",
             },
+            HTTP_ACCEPT="application/json",
         )
         self.assertEquals(
-            response.json()["count"], Alert.objects.filter(owner=account).count()
+            len(response.json()), Alert.objects.filter(owner=account).count()
         )
 
-    @settings(max_examples=2)
+    @settings(max_examples=1)
     @given(from_model(Account))
     def test_list_for_a_account(self, account):
         Alert.objects.create(
@@ -64,15 +67,15 @@ class AlertAPIViewTestCase(TestCase, APITestCase):
         )
         response = self.client.get(
             url,
-            **{
-                "QUERY_STRING": f"email={account.email}",
+            data={
+                "email": account.email,
             },
         )
         self.assertEquals(
-            response.json()["count"], Alert.objects.filter(owner=account).count()
+            len(response.json()), Alert.objects.filter(owner=account).count()
         )
 
-    @settings(max_examples=5)
+    @settings(max_examples=1)
     @given(from_model(Alert, owner=from_model(Account)))
     def test_alert_get_object(self, alert):
         url = reverse(
@@ -109,16 +112,6 @@ class AlertAPIViewTestCase(TestCase, APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()["interval_time"], "2")
-
-    @settings(max_examples=1)
-    @given(from_model(Alert, owner=from_model(Account)))
-    def test_alert_object_delete_send_email(self, alert):
-        url = reverse(
-            "alerts:alert-delete",
-            kwargs={"uuid": alert.uuid},
-        )
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
 
     @settings(max_examples=1)
     @given(from_model(Alert, owner=from_model(Account)))
