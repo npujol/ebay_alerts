@@ -1,24 +1,68 @@
+from celery.utils.log import get_task_logger
+
 from celery import shared_task
-from django.core.mail import send_mail, EmailMessage
-from django.shortcuts import get_object_or_404
-from django.core.mail import send_mail, EmailMessage
-from django.conf import settings
-from django.urls import reverse
+from .emails import send_email_after_create, send_email_with_ebay_answer
 from .models import Alert
 
+logger = get_task_logger(__name__)
 
-@shared_task(name="Send Ebay search results")
-def send_creation_email(email):
-    message = """
-    You had created a new alert:
-    Search: 
-    Interval of time:."""
 
-    send_mail(
-        "New alert was created.",
-        message,
-        settings.EMAIL_HOST_USER,
-        [email],
-        fail_silently=False,
-    )
-    return f"The email to the user {email} was sended"
+@shared_task(name="send_email_with_ebay_answer_task")
+def send_email_with_ebay_answer_task(uuid):
+    """send_email_with_ebay_answer_task"""
+    logger.info(f"Task: send_email_with_ebay_answer_task, alert: {uuid}")
+    return send_email_with_ebay_answer(uuid)
+
+
+@shared_task(name="send_creation_email_task")
+def send_creation_email_task(uuid):
+    """send_creation_email_task"""
+    logger.info(f"Task: send_creation_email_task, alert: {uuid}")
+    return send_email_after_create(uuid)
+
+
+@shared_task(
+    name="send_alert_email_every_two_minutes_task",
+    ignore_result=True,
+)
+def send_alert_email_every_two_minutes_task():
+    """send_alert_email_every_two_minutes_task"""
+    logger.info(f"Task: send_alert_email_every_two_minutes_task")
+    alerts = Alert.objects.email_every_two_minutes().values()
+    for a in alerts:
+        uuid = a["uuid"]
+        print(uuid)
+        send_email_with_ebay_answer_task.apply_async(args=[uuid])
+        logger.info(f"Task: send_email_with_ebay_answer_task whit uuid:{uuid}")
+    logger.info("The tasks were initialized")
+    return "The tasks were initialized"
+
+
+@shared_task(
+    name="send_alert_email_every_ten_minutes_task",
+)
+def send_alert_email_every_ten_minutes_task():
+    """send_alert_email_every_ten_minutes_task"""
+    logger.info("Task:send_alert_email_every_ten_minutes_task")
+    alerts = Alert.objects.email_every_ten_minutes().values()
+    for a in alerts:
+        uuid = a["uuid"]
+        send_email_with_ebay_answer_task.apply_async(args=[uuid])
+        logger.info(f"Task: send_email_with_ebay_answer_task whit uuid:{uuid}")
+    logger.info("The tasks were initialized")
+    return "The tasks were initialized"
+
+
+@shared_task(
+    name="send_alert_email_every_thirty_minutes_task",
+)
+def send_alert_email_every_thirty_minutes_task():
+    """send_alert_email_every_thirty_minutes_task"""
+    logger.info("send_alert_email_every_thirty_minutes_task")
+    alerts = Alert.objects.email_every_thirty_minutes().values()
+    for a in alerts:
+        uuid = a["uuid"]
+        send_email_with_ebay_answer_task.apply_async(args=[uuid])
+        logger.info(f"Task: send_email_with_ebay_answer_task whit uuid:{uuid}")
+    logger.info("The tasks were initialized")
+    return "The tasks were initialized"
