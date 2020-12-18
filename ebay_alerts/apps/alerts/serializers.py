@@ -1,8 +1,7 @@
 from django.db import IntegrityError, transaction
 from rest_framework import serializers
 from .models import Alert, Account
-from .tasks import send_creation_email
-from .emails import send_email_after_create
+from .tasks import send_creation_email_task
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -35,7 +34,7 @@ class AlertSerializer(serializers.ModelSerializer):
 
         instance = Alert.objects.create(**validated_data)
         transaction.on_commit(
-            lambda: send_creation_email.apply_async(args=[instance.owner.email])
+            lambda: send_creation_email_task.apply_async(args=[instance.uuid])
         )
         return instance
 

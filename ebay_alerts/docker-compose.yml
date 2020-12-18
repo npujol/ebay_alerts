@@ -27,12 +27,21 @@ services:
   worker:
     image: ebay_alerts
     restart: "no"
-    command: celery -A ebay_alerts worker
+    command:  bash -c "celery -A ebay_alerts inspect registered && celery -A ebay_alerts worker -l info"
     volumes:
       - .:/code
     links:
       - redis 
       - database
+
+  worker2:
+    image: ebay_alerts
+    restart: "no"
+    command: celery -A ebay_alerts beat -l info
+    volumes:
+      - .:/code
+    links:
+      - redis 
 
   nginx:
     build:

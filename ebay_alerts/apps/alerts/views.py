@@ -7,7 +7,6 @@ from rest_framework.response import Response
 
 from .models import Alert, Account
 from .serializers import AlertSerializer, AlertsListSerializer
-from .emails import send_email_to_delete_a_alert
 
 
 class AlertViewSet(viewsets.ModelViewSet):

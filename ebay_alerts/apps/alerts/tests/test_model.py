@@ -51,3 +51,11 @@ class TestAccountModel(TestCase):
         for a in accounts:
             self.assertIsNotNone(a.uuid)
         assert len({a.uuid for a in accounts}), len({a.email for a in accounts})
+
+
+class TestAlertModel2(TestCase):
+    @given(from_model(Alert, owner=from_model(Account)))
+    def test_need_to_send_email(self, alert):
+
+        response = Alert.objects.email_every_thirty_minutes().values()
+        assert isinstance(response, list)
