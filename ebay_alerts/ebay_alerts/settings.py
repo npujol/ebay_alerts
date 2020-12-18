@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 import environ
-
+from celery.schedules import crontab
 from pathlib import Path
 
 env = environ.Env(
@@ -145,12 +145,6 @@ REST_FRAMEWORK = {
 
 SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False}
 
-CELERY_BROKER_URL = "redis://redis:6379"
-CELERY_RESULT_BACKEND = "redis://redis:6379"
-CELERY_ACCEPT_CONTENT = ["application/json"]
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_TASK_SERIALIZER = "json"
-
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
@@ -160,3 +154,24 @@ EMAIL_HOST_USER = env("EMAIL_USERNAME")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
 
 EBAY_APPID = env("EBAY_APPID")
+
+
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_SERIALIZER = "json"
+CELERY_BEAT_SCHEDULE = {
+    "send-alert-email-every-two-minutes-task": {
+        "task": "send_alert_email_every_two_minutes_task",
+        "schedule": crontab(minute="*/2"),
+    },
+    "send-alert-email-every-ten-minutes-task": {
+        "task": "send_alert_email_every_ten_minutes_task",
+        "schedule": crontab(minute="*/10"),
+    },
+    "send-alert-email-every-thirty-minutes-task": {
+        "task": "send_alert_email_every_thirty_minutes_task",
+        "schedule": crontab(minute="*/30"),
+    },
+}
