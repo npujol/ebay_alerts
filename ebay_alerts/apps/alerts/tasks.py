@@ -1,7 +1,11 @@
 from celery.utils.log import get_task_logger
 
 from celery import shared_task
-from .emails import send_email_after_create, send_email_with_ebay_answer
+from .emails import (
+    send_email_after_create,
+    send_email_with_ebay_answer,
+    send_email_to_delete,
+)
 from .models import Alert
 
 logger = get_task_logger(__name__)
@@ -19,6 +23,13 @@ def send_creation_email_task(uuid):
     """send_creation_email_task"""
     logger.info(f"Task: send_creation_email_task, alert: {uuid}")
     return send_email_after_create(uuid)
+
+
+@shared_task(name="send_email_to_delete_task")
+def send_email_to_delete_task(uuid):
+    """send_email_to_delete_task"""
+    logger.info(f"Task: send_email_to_delete_task, alert: {uuid}")
+    return send_email_to_delete(uuid)
 
 
 @shared_task(
