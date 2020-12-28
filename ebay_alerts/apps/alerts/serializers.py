@@ -5,9 +5,12 @@ from .tasks import send_creation_email_task
 
 
 class AccountSerializer(serializers.ModelSerializer):
+    alerts = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Account
-        fields = ("email",)
+        fields = ("uuid", "email", "alerts")
+        read_only_fields = fields
 
 
 class AlertSerializer(serializers.ModelSerializer):

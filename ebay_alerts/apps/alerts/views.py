@@ -1,12 +1,13 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
+from rest_framework.generics import GenericAPIView, mixins
 
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Alert, Account
-from .serializers import AlertSerializer, AlertsListSerializer
+from .serializers import AlertSerializer, AlertsListSerializer, AccountSerializer
 from .permissions import IsOwner
 from .tasks import send_email_to_delete_task
 
@@ -34,11 +35,6 @@ class AlertViewSet(viewsets.ModelViewSet):
     queryset = Alert.objects.all()
     lookup_field = "uuid"
 
-    def get_serializer_class(self):
-        if self.action == "list":
-            return AlertsListSerializer
-        return AlertSerializer
-
     def list(self, request, *args, **kwargs):
         email = self.request.query_params.get("email", None)
         if email:
@@ -58,3 +54,18 @@ class AlertViewSet(viewsets.ModelViewSet):
             {"detail": "We are sending the email! You will receive the email soon."},
             status=status.HTTP_202_ACCEPTED,
         )
+
+
+class AccountAlertsViewSet(viewsets.ModelViewSet):
+    """
+    General ViewSet description
+
+    list: List the alerts for a user
+    retrive:
+
+    """
+
+    permission_classes = (AllowAny,)
+    serializer_class = AccountSerializer
+    queryset = Account.objects.all()
+    lookup_field = "uuid"
