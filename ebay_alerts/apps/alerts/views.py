@@ -7,6 +7,8 @@ from rest_framework.response import Response
 
 from .models import Alert, Account
 from .serializers import AlertSerializer, AlertsListSerializer
+from .permissions import IsOwner
+from .tasks import send_email_to_delete_task
 
 
 class AlertViewSet(viewsets.ModelViewSet):
@@ -42,3 +44,17 @@ class AlertViewSet(viewsets.ModelViewSet):
         if email:
             self.queryset = self.queryset.filter(owner__email=email)
         return super().list(self, request, *args, **kwargs)
+
+    @action(
+        detail=True,
+        methods=["post"],
+        permission_classes=[IsOwner],
+    )
+    def email_to_delete(self, request, uuid=None):
+        instance = get_object_or_404(Alert, uuid=uuid)
+        send_email_to_delete_task.apply_async(args=[uuid])
+
+        return Response(
+            {"detail": "We are sending the email! You will receive the email soon."},
+            status=status.HTTP_202_ACCEPTED,
+        )
