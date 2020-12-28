@@ -21,20 +21,20 @@ class Account(models.Model):
 
 class AlertQuerySet(models.QuerySet):
     def email_every_two_minutes(self):
-        return self.filter(interval_time="2")
+        return self.filter(interval_time=2)
 
     def email_every_ten_minutes(self):
-        return self.filter(interval_time="10")
+        return self.filter(interval_time=10)
 
     def email_every_thirty_minutes(self):
-        return self.filter(interval_time="30")
+        return self.filter(interval_time=30)
 
 
 class Alert(models.Model):
     class IntervalOfTime(models.TextChoices):
-        TWO = "2", "2 minutes"
-        TEN = "10", "10 minutes"
-        THIRTY = "30", "30 minutes"
+        TWO = 2, "2 minutes"
+        TEN = 10, "10 minutes"
+        THIRTY = 30, "30 minutes"
 
     uuid = models.UUIDField(
         primary_key=True, unique=True, default=uuid.uuid4, editable=False
