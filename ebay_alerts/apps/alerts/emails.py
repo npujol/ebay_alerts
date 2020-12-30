@@ -10,8 +10,8 @@ from django.urls import reverse
 from .utils import get_relative_url
 
 
-def send_email_after_create(uuid=None):
-    alert = get_object_or_404(Alert, uuid=uuid, site_base="http://localhost:8000")
+def send_email_after_create(uuid=None, site_base="http://localhost:8000"):
+    alert = get_object_or_404(Alert, uuid=uuid)
     email = alert.owner.email
     subject, from_email, to = (
         "A new alert was created.",

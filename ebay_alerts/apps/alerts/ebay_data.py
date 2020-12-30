@@ -18,7 +18,7 @@ def get_ebay_data(search_term, limit=10, interval_time=30):
             "keywords": search_term,
             "itemFilter": [
                 {"name": "condition", "value": "new"},
-                {"name": "StartTimeFrom", "value": now_minus_interval.isoformat()},
+                # {"name": "StartTimeFrom", "value": now_minus_interval.isoformat()},
             ],
             "paginationInput": {"entriesPerPage": limit, "pageNumber": 1},
             "sortOrder": "PricePlusShippingLowest",
