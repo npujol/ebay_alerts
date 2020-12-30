@@ -1,0 +1,3 @@
+[submodule "ebay_alerts/frontend"]
+	path = ebay_alerts/frontend
+	url = git@github.com:npujol/alerts_fronted.git
