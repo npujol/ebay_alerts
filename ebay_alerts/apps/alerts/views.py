@@ -48,7 +48,9 @@ class AlertViewSet(viewsets.ModelViewSet):
     )
     def email_to_delete(self, request, uuid=None):
         instance = get_object_or_404(Alert, uuid=uuid)
-        send_email_to_delete_task.apply_async(args=[uuid])
+        send_email_to_delete_task.apply_async(
+            args=[uuid, f"http://{request.get_host()}:{request.get_port()}"]
+        )
 
         return Response(
             {"detail": "We are sending the email! You will receive the email soon."},

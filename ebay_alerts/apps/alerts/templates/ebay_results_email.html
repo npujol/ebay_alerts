@@ -17,6 +17,8 @@
         {%else %}
         <p style='color:red'> This search term hadn't results. </p>
         {%endif %}
+        {% include "footer.html" with field=link_views %}
+
     </body>
 
 </html>

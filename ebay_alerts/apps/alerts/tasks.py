@@ -26,10 +26,10 @@ def send_creation_email_task(uuid):
 
 
 @shared_task(name="send_email_to_delete_task")
-def send_email_to_delete_task(uuid):
+def send_email_to_delete_task(uuid, site_base):
     """send_email_to_delete_task"""
     logger.info(f"Task: send_email_to_delete_task, alert: {uuid}")
-    return send_email_to_delete(uuid)
+    return send_email_to_delete(uuid, site_base)
 
 
 @shared_task(
