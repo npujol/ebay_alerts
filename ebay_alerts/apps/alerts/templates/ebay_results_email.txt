@@ -7,4 +7,6 @@ time:{{alert.interval_time}}
 {%else %}
 This search term hadn't results.
 {%endif %}
+{% include "footer.txt" with field=link_views %}
+
 

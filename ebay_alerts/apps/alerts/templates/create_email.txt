@@ -2,3 +2,6 @@ The alert with uuid: {{ alert.uuid }}, search term: {{ alert.search_term }}
 and interval  time:{{alert.interval_time}} was created
             This is an important message.
                        By Admin.
+
+{% include "footer.txt" with field=link_views %}
+
