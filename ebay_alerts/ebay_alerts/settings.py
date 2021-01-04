@@ -166,15 +166,18 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
 CELERY_BEAT_SCHEDULE = {
     "send-alert-email-every-two-minutes-task": {
-        "task": "send_alert_email_every_two_minutes_task",
+        "task": "send_alert_email_every_x_minutes_task",
         "schedule": crontab(minute="*/2"),
+        'args': (2,),
     },
     "send-alert-email-every-ten-minutes-task": {
-        "task": "send_alert_email_every_ten_minutes_task",
+        "task": "send_alert_email_every_x_minutes_task",
         "schedule": crontab(minute="*/10"),
+        'args': (10,),
     },
     "send-alert-email-every-thirty-minutes-task": {
-        "task": "send_alert_email_every_thirty_minutes_task",
+        "task": "send_alert_email_every_x_minutes_task",
         "schedule": crontab(minute="*/30"),
+        'args': (30,),
     },
 }
