@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
-from .models import Alert, Account
+
+from .models import Account, Alert
 from .tasks import send_creation_email_task
 
 
@@ -19,13 +20,7 @@ class AlertSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Alert
-        fields = (
-            "uuid",
-            "owner",
-            "search_term",
-            "interval_time",
-            "email",
-        )
+        fields = ("uuid", "owner", "search_term", "interval_time", "email")
 
     @transaction.atomic
     def create(self, validated_data):

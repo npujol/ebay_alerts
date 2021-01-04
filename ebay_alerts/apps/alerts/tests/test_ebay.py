@@ -1,6 +1,8 @@
-from django.test import TestCase
 from unittest import skip
-from ..ebay_data import get_ebay_data, get_ebay_data_fake
+
+from django.test import TestCase
+
+from ..ebay_data import get_ebay_data
 
 
 class TestEbayData(TestCase):
@@ -14,10 +16,3 @@ class TestEbayData(TestCase):
         item = response.reply.searchResult.item[0]
         assert type(item.listingInfo.endTime) == datetime.datetime
         assert type(response.dict()) == dict
-
-    def test_get_data_from_fake_ebay(self):
-        response = get_ebay_data_fake("a")
-        assert type(response) == list
-        if response:
-            item = response[0]
-            assert "a" in item["title"]

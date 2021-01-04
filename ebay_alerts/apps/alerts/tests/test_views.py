@@ -1,9 +1,10 @@
-from hypothesis import given, settings
-from hypothesis.extra.django import from_model, TestCase
 from django.urls import reverse
+from hypothesis import given, settings
+from hypothesis.extra.django import TestCase, from_model
 from rest_framework import status
-from rest_framework.test import APIClient, APIRequestFactory, APITestCase
-from ..models import Alert, Account
+from rest_framework.test import APITestCase
+
+from ..models import Account, Alert
 
 
 class AlertAPIViewTestCase(TestCase, APITestCase):
@@ -42,16 +43,11 @@ class AlertAPIViewTestCase(TestCase, APITestCase):
     @settings(max_examples=1)
     @given(from_model(Account))
     def test_empty_list_for_a_account(self, account):
-        url = reverse(
-            "alerts:alert-list",
-        )
+        url = reverse("alerts:alert-list")
         response = self.client.get(
-            url,
-            data={
-                "email": "test3@email.com",
-            },
-            HTTP_ACCEPT="application/json",
+            url, data={"account": account.uuid}, HTTP_ACCEPT="application/json"
         )
+        print(response)
         self.assertEquals(
             len(response.json()), Alert.objects.filter(owner=account).count()
         )
@@ -62,15 +58,8 @@ class AlertAPIViewTestCase(TestCase, APITestCase):
         Alert.objects.create(
             owner=account, search_term="test term2", interval_time="30"
         )
-        url = reverse(
-            "alerts:alert-list",
-        )
-        response = self.client.get(
-            url,
-            data={
-                "email": account.email,
-            },
-        )
+        url = reverse("alerts:alert-list")
+        response = self.client.get(url, data={"account": account.uuid})
         self.assertEquals(
             len(response.json()), Alert.objects.filter(owner=account).count()
         )
@@ -78,47 +67,29 @@ class AlertAPIViewTestCase(TestCase, APITestCase):
     @settings(max_examples=1)
     @given(from_model(Alert, owner=from_model(Account)))
     def test_alert_get_object(self, alert):
-        url = reverse(
-            "alerts:alert-detail",
-            kwargs={"uuid": alert.uuid},
-        )
+        url = reverse("alerts:alert-detail", kwargs={"uuid": alert.uuid})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     @settings(max_examples=1)
     @given(from_model(Alert, owner=from_model(Account)))
     def test_alert_object_partial_update_search_term(self, alert):
-        url = reverse(
-            "alerts:alert-detail",
-            kwargs={"uuid": alert.uuid},
-        )
-        response = self.client.patch(
-            url,
-            {"search_term": "string2"},
-        )
+        url = reverse("alerts:alert-detail", kwargs={"uuid": alert.uuid})
+        response = self.client.patch(url, {"search_term": "string2"})
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()["search_term"], "string2")
 
     @settings(max_examples=1)
     @given(from_model(Alert, owner=from_model(Account)))
     def test_alert_object_partial_update_interval_time(self, alert):
-        url = reverse(
-            "alerts:alert-detail",
-            kwargs={"uuid": alert.uuid},
-        )
-        response = self.client.patch(
-            url,
-            {"interval_time": "2"},
-        )
+        url = reverse("alerts:alert-detail", kwargs={"uuid": alert.uuid})
+        response = self.client.patch(url, {"interval_time": "2"})
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
         self.assertEqual(response.json()["interval_time"], "2")
 
     @settings(max_examples=1)
     @given(from_model(Alert, owner=from_model(Account)))
     def test_alert_object_delete(self, alert):
-        url = reverse(
-            "alerts:alert-detail",
-            kwargs={"uuid": alert.uuid},
-        )
+        url = reverse("alerts:alert-detail", kwargs={"uuid": alert.uuid})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

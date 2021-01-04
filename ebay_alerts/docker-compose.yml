@@ -22,7 +22,7 @@ services:
 
   redis:
     image: redis:alpine
-    ports: 
+    ports:
       - 6379:6379
 
   worker:
@@ -32,7 +32,7 @@ services:
     volumes:
       - .:/code
     links:
-      - redis 
+      - redis
       - database
 
   worker2:
@@ -42,7 +42,7 @@ services:
     volumes:
       - .:/code
     links:
-      - redis 
+      - redis
 
   nginx:
     build:

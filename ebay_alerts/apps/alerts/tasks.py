@@ -1,10 +1,10 @@
+from celery import shared_task
 from celery.utils.log import get_task_logger
 
-from celery import shared_task
 from .emails import (
     send_email_after_create,
-    send_email_with_ebay_answer,
     send_email_to_delete,
+    send_email_with_ebay_answer,
 )
 from .models import Alert
 
@@ -32,10 +32,7 @@ def send_email_to_delete_task(uuid, site_base):
     return send_email_to_delete(uuid, site_base)
 
 
-@shared_task(
-    name="send_alert_email_every_x_minutes_task",
-    ignore_result=True,
-)
+@shared_task(name="send_alert_email_every_x_minutes_task", ignore_result=True)
 def send_alert_email_every_x_minutes_task(interval_time):
     """send_alert_email_every_x_minutes_task"""
     logger.info(f"Task: send_alert_email_every_{interval_time}_minutes_task")

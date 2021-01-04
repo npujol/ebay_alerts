@@ -2,4 +2,3 @@ You want to remove the alert with uuid: {{ alert.uuid }}, search term: {{ alert.
 Confirm: {{ link }}
 
 {% include "footer.txt" with field=link_views %}
-
