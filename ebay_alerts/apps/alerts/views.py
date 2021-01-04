@@ -79,7 +79,11 @@ class AlertViewSet(viewsets.ModelViewSet):
 class AccountRetriveAPIView(RetrieveAPIView):
     """
     General ViewSet description
+<<<<<<< HEAD
     retrieve: Get an account
+=======
+    retrive: Get an account
+>>>>>>> 5704f667ee218a606a23cfff74e5516992807fb7
 
     """
 
