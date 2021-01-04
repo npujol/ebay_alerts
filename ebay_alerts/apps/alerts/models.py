@@ -1,6 +1,7 @@
-
 import uuid
+
 from django.db import models
+
 
 class BaseModel(models.Model):
     uuid = models.UUIDField(
@@ -12,11 +13,10 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-class Account(BaseModel): 
-    email = models.EmailField(
-        unique=True,
-    )
-   
+
+class Account(BaseModel):
+    email = models.EmailField(unique=True)
+
     def __str__(self):
         return self.email
 
@@ -24,7 +24,7 @@ class Account(BaseModel):
 class AlertQuerySet(models.QuerySet):
     def email_every_minutes(self, interval_time):
         return self.filter(interval_time=interval_time)
-    
+
 
 class Alert(BaseModel):
     class IntervalOfTime(models.TextChoices):
@@ -32,16 +32,10 @@ class Alert(BaseModel):
         TEN = 10, "10 minutes"
         THIRTY = 30, "30 minutes"
 
-    owner = models.ForeignKey(
-        Account,
-        on_delete=models.CASCADE,
-        related_name="alerts",
-    )
+    owner = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="alerts")
     search_term = models.CharField(max_length=250)
     interval_time = models.CharField(
-        max_length=2,
-        choices=IntervalOfTime.choices,
-        default=IntervalOfTime.THIRTY,
+        max_length=2, choices=IntervalOfTime.choices, default=IntervalOfTime.THIRTY
     )
 
     objects = AlertQuerySet.as_manager()
@@ -51,4 +45,4 @@ class Alert(BaseModel):
         ordering = ["updated_at"]
 
     def __str__(self):
-        return f"Alert number: {self.id}"
+        return f"Alert number: {self.uuid}"

@@ -1,11 +1,9 @@
-from hypothesis import assume, given, HealthCheck, Verbosity, settings
-from hypothesis.extra.django import (
-    TestCase,
-    from_model,
-)
+from hypothesis import HealthCheck, Verbosity, assume, given, settings
+from hypothesis.extra.django import TestCase, from_model
 from hypothesis.strategies import lists
-from ..models import Alert, Account
-from ..serializers import AlertSerializer, AccountSerializer
+
+from ..models import Account, Alert
+from ..serializers import AccountSerializer, AlertSerializer
 
 
 class TestAlertSerializer(TestCase):
@@ -22,15 +20,13 @@ class TestAlertSerializer(TestCase):
     def test_contains_expected_fields(self):
         data = self.serializer.data
         self.assertEqual(
-            set(data.keys()),
-            set(["uuid", "owner", "search_term", "interval_time"]),
+            set(data.keys()), set(["uuid", "owner", "search_term", "interval_time"])
         )
 
     def test_contains_expected_write_only_fields(self):
         data = self.serializer.data
         self.assertEqual(
-            set(data.keys()),
-            set(["uuid", "owner", "search_term", "interval_time"]),
+            set(data.keys()), set(["uuid", "owner", "search_term", "interval_time"])
         )
 
     def test_interval_time_must_be_in_choices(self):

@@ -4,4 +4,3 @@ and interval  time:{{alert.interval_time}} was created
                        By Admin.
 
 {% include "footer.txt" with field=link_views %}
-
