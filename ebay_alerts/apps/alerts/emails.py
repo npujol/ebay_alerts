@@ -8,9 +8,10 @@ from .fake_ebay import get_filtered_data
 from .ebay_data import get_ebay_data
 from django.urls import reverse
 from .utils import get_relative_url
+from django.contrib.sites.requests import RequestSite
 
 
-def send_email_after_create(uuid=None, site_base="http://localhost:8000"):
+def send_email_after_create(uuid=None, site_base=settings.DEFAULT_BASE_URL):
     alert = get_object_or_404(Alert, uuid=uuid)
     email = alert.owner.email
     subject, from_email, to = (
@@ -31,7 +32,7 @@ def send_email_after_create(uuid=None, site_base="http://localhost:8000"):
     return f"The task: send_email_after_create to the user {email} was started"
 
 
-def send_email_to_delete(uuid=None, site_base="http://localhost:8000"):
+def send_email_to_delete(uuid=None, site_base=settings.DEFAULT_BASE_URL):
     alert = get_object_or_404(Alert, uuid=uuid)
     email = alert.owner.email
     subject, from_email, to = (
@@ -52,7 +53,7 @@ def send_email_to_delete(uuid=None, site_base="http://localhost:8000"):
     return f"The task: send_email_to_delete to the user {email} was started"
 
 
-def send_email_with_ebay_answer(uuid=None, site_base="http://localhost:8000"):
+def send_email_with_ebay_answer(uuid=None, site_base=settings.DEFAULT_BASE_URL):
     alert = get_object_or_404(Alert, uuid=uuid)
     email = alert.owner.email
     results = get_ebay_data(alert.search_term, 5, alert.interval_time)
