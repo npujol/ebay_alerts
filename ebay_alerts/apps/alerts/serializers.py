@@ -29,7 +29,6 @@ class AlertSerializer(serializers.ModelSerializer):
             account, _ = Account.objects.get_or_create(email=email)
             del validated_data["email"]
             validated_data["owner"] = account
-        print(self.context["request"])
         instance, _ = Alert.objects.get_or_create(**validated_data)
         transaction.on_commit(
             lambda: send_creation_email_task.apply_async(args=[instance.uuid])

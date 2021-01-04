@@ -64,7 +64,6 @@ class AlertViewSet(viewsets.ModelViewSet):
         """
         instance = get_object_or_404(Alert, uuid=uuid)
 
-        print(request.get_full_path)
         if instance:
             send_email_to_delete_task.apply_async(
                 args=[uuid, str(request.build_absolute_uri("/"))]
@@ -79,11 +78,7 @@ class AlertViewSet(viewsets.ModelViewSet):
 class AccountRetriveAPIView(RetrieveAPIView):
     """
     General ViewSet description
-<<<<<<< HEAD
     retrieve: Get an account
-=======
-    retrive: Get an account
->>>>>>> 5704f667ee218a606a23cfff74e5516992807fb7
 
     """
 

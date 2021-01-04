@@ -12,5 +12,4 @@ class TestEmails(TestCase):
     @given(from_model(Alert, owner=from_model(Account)))
     def test_send_email_to_delete(self, alert):
         msg = send_email_to_delete(alert.uuid)
-        print(msg)
         assert True

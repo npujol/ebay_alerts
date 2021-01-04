@@ -47,7 +47,6 @@ class AlertAPIViewTestCase(TestCase, APITestCase):
         response = self.client.get(
             url, data={"account": account.uuid}, HTTP_ACCEPT="application/json"
         )
-        print(response)
         self.assertEquals(
             len(response.json()), Alert.objects.filter(owner=account).count()
         )
