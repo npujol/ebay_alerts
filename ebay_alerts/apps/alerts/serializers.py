@@ -1,4 +1,4 @@
-from django.db import IntegrityError, transaction
+from django.db import transaction
 from rest_framework import serializers
 from .models import Alert, Account
 from .tasks import send_creation_email_task
@@ -40,16 +40,3 @@ class AlertSerializer(serializers.ModelSerializer):
             lambda: send_creation_email_task.apply_async(args=[instance.uuid])
         )
         return instance
-
-
-class AlertsListSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(write_only=True)
-
-    class Meta:
-        model = Alert
-        fields = (
-            "uuid",
-            "search_term",
-            "interval_time",
-            "email",
-        )
