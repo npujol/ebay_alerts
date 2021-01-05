@@ -2,7 +2,7 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action, api_view
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, DestroyAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -57,9 +57,11 @@ class AlertViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(
         responses={
-            202: {
-                "detail": "We are sending the email! You will receive the email soon."
-            }
+            202: openapi.Response(
+                {
+                    "detail": "We are sending the email! You will receive the email soon."
+                },
+            )
         },
     )
     @action(methods=["post"], detail=True)
@@ -78,10 +80,17 @@ class AlertViewSet(viewsets.ModelViewSet):
         )
 
 
-class AccountRetriveAPIView(RetrieveAPIView):
+class AccountViewSet(
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.DestroyModelMixin,
+    viewsets.mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     """
     General ViewSet description
+    list: Get a list of accounts
     retrieve: Get an account
+    destroy: Delete an account
     """
 
     permission_classes = (AllowAny,)

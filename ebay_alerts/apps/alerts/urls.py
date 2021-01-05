@@ -8,13 +8,9 @@ app_name = "alerts"
 
 router = DefaultRouter(trailing_slash=False)
 router.register("alerts", views.AlertViewSet, basename="alert")
+router.register("accounts", views.AccountViewSet, basename="account")
 
 
 urlpatterns = [
     path("", include(router.urls)),
-    path(
-        "accounts/<uuid:uuid>",
-        views.AccountRetriveAPIView.as_view(),
-        name="account-retrive",
-    ),
 ]
