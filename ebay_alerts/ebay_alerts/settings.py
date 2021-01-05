@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+from pathlib import Path
+
 import environ
 from celery.schedules import crontab
-from pathlib import Path
 
 env = environ.Env(
     # set casting, default value
@@ -29,6 +30,7 @@ SECRET_KEY = env("SECRET_KEY")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DEFAULT_BASE_URL = "http://localhost:8000"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -75,9 +77,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-            ],
+            ]
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = "ebay_alerts.wsgi.application"
@@ -97,17 +99,11 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
@@ -166,15 +162,18 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
 CELERY_BEAT_SCHEDULE = {
     "send-alert-email-every-two-minutes-task": {
-        "task": "send_alert_email_every_two_minutes_task",
+        "task": "send_alert_email_every_x_minutes_task",
         "schedule": crontab(minute="*/2"),
+        "args": (2,),
     },
     "send-alert-email-every-ten-minutes-task": {
-        "task": "send_alert_email_every_ten_minutes_task",
+        "task": "send_alert_email_every_x_minutes_task",
         "schedule": crontab(minute="*/10"),
+        "args": (10,),
     },
     "send-alert-email-every-thirty-minutes-task": {
-        "task": "send_alert_email_every_thirty_minutes_task",
+        "task": "send_alert_email_every_x_minutes_task",
         "schedule": crontab(minute="*/30"),
+        "args": (30,),
     },
 }

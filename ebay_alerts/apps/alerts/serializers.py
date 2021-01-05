@@ -1,6 +1,7 @@
-from django.db import IntegrityError, transaction
+from django.db import transaction
 from rest_framework import serializers
-from .models import Alert, Account
+
+from .models import Account, Alert
 from .tasks import send_creation_email_task
 
 
@@ -19,13 +20,7 @@ class AlertSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Alert
-        fields = (
-            "uuid",
-            "owner",
-            "search_term",
-            "interval_time",
-            "email",
-        )
+        fields = ("uuid", "owner", "search_term", "interval_time", "email")
 
     @transaction.atomic
     def create(self, validated_data):
@@ -34,22 +29,8 @@ class AlertSerializer(serializers.ModelSerializer):
             account, _ = Account.objects.get_or_create(email=email)
             del validated_data["email"]
             validated_data["owner"] = account
-        print(self.context["request"])
         instance, _ = Alert.objects.get_or_create(**validated_data)
         transaction.on_commit(
             lambda: send_creation_email_task.apply_async(args=[instance.uuid])
         )
         return instance
-
-
-class AlertsListSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(write_only=True)
-
-    class Meta:
-        model = Alert
-        fields = (
-            "uuid",
-            "search_term",
-            "interval_time",
-            "email",
-        )

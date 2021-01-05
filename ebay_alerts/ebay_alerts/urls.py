@@ -13,28 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
-from django.conf.urls import include, url
-from django.views.generic import RedirectView
-from django.conf.urls.static import static
 from django.conf import settings
-
+from django.conf.urls import include, url
+from django.conf.urls.static import static
+from django.urls import path
+from django.views.generic import RedirectView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
-
 schema_view = get_schema_view(
-    openapi.Info(
-        title="My ebay alerts API",
-        default_version="v1",
-    ),
+    openapi.Info(title="My ebay alerts API", default_version="v1"),
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
-    path("", RedirectView.as_view(pattern_name="schema-swagger-ui")),
     path("api/", include("apps.alerts.urls", namespace="alerts")),
     url(
         r"^api/swagger(?P<format>\.json|\.yaml)$",

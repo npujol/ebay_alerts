@@ -1,10 +1,8 @@
-from hypothesis import assume, given, HealthCheck, Verbosity, settings
-from hypothesis.extra.django import (
-    TestCase,
-    from_model,
-)
+from hypothesis import HealthCheck, Verbosity, assume, given, settings
+from hypothesis.extra.django import TestCase, from_model
 from hypothesis.strategies import lists
-from ..models import Alert, Account
+
+from ..models import Account, Alert
 
 
 class TestAlertModel(TestCase):
@@ -57,5 +55,5 @@ class TestAlertModel2(TestCase):
     @given(from_model(Alert, owner=from_model(Account)))
     def test_need_to_send_email(self, alert):
 
-        response = Alert.objects.email_every_thirty_minutes().values()
+        response = Alert.objects.email_every_minutes(2).values()
         assert isinstance(response, list)

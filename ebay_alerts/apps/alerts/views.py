@@ -1,14 +1,13 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status
-from rest_framework.generics import GenericAPIView, mixins
-
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status, viewsets
+from rest_framework.decorators import action, api_view
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import AllowAny
-from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Alert, Account
-from .serializers import AlertSerializer, AlertsListSerializer, AccountSerializer
-from .permissions import IsOwner
+from .models import Account, Alert
+from .serializers import AccountSerializer, AlertSerializer
 from .tasks import send_email_to_delete_task
 
 
@@ -35,21 +34,42 @@ class AlertViewSet(viewsets.ModelViewSet):
     queryset = Alert.objects.all()
     lookup_field = "uuid"
 
-    def list(self, request, *args, **kwargs):
-        email = self.request.query_params.get("email", None)
-        if email:
-            self.queryset = self.queryset.filter(owner__email=email)
-        return super().list(self, request, *args, **kwargs)
-
-    @action(
-        detail=True,
-        methods=["post"],
-        permission_classes=[IsOwner],
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                "uuid",
+                openapi.IN_QUERY,
+                description="uuid from the account",
+                type=openapi.TYPE_STRING,
+                required=True,
+            )
+        ],
+        responses={200: AlertSerializer(many=True)},
     )
+    def list(self, request, *args, **kwargs):
+        """
+        uuid -- The uuid for an account
+        """
+        account = self.request.query_params.get("uuid", None)
+        if account:
+            self.queryset = self.queryset.filter(owner__uuid=account)
+        return super().list(self, request._request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        responses={
+            202: {
+                "detail": "We are sending the email! You will receive the email soon."
+            }
+        },
+    )
+    @action(methods=["post"], detail=True)
     def email_to_delete(self, request, uuid=None):
-        instance = get_object_or_404(Alert, uuid=uuid)
+        """
+        Send an email to delete an alert
+        """
+        instance = self.get_object()
         send_email_to_delete_task.apply_async(
-            args=[uuid, f"http://{request.get_host()}:{request.get_port()}"]
+            args=[uuid, str(request.build_absolute_uri("/"))]
         )
 
         return Response(
@@ -58,13 +78,10 @@ class AlertViewSet(viewsets.ModelViewSet):
         )
 
 
-class AccountAlertsViewSet(viewsets.ModelViewSet):
+class AccountRetriveAPIView(RetrieveAPIView):
     """
     General ViewSet description
-
-    list: List the alerts for a user
-    retrive:
-
+    retrieve: Get an account
     """
 
     permission_classes = (AllowAny,)

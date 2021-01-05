@@ -1,5 +1,5 @@
 The alert with uuid: {{ alert.uuid }}, search term: {{ alert.search_term }} and interval
-time:{{alert.interval_time}} 
+time:{{alert.interval_time}}
 {% if results%}
     {% for result in results %}
     {{ result.title }}
@@ -8,5 +8,3 @@ time:{{alert.interval_time}}
 This search term hadn't results.
 {%endif %}
 {% include "footer.txt" with field=link_views %}
-
-

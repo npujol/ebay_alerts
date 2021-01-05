@@ -5,13 +5,10 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('alerts', '0003_auto_20201212_1255'),
-    ]
+    dependencies = [("alerts", "0003_auto_20201212_1255")]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='alert',
-            unique_together={('search_term', 'interval_time', 'owner')},
-        ),
+            name="alert", unique_together={("search_term", "interval_time", "owner")}
+        )
     ]
