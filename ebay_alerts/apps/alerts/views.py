@@ -58,9 +58,7 @@ class AlertViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         responses={
             202: openapi.Response(
-                {
-                    "detail": "We are sending the email! You will receive the email soon."
-                },
+                {"detail": "We are sending the email! You will receive the email soon."}
             )
         },
     )
