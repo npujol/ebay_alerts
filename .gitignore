@@ -96,3 +96,7 @@ settings.json
 myproject/apps/static
 media/
 myproject/apps/core/static/core/
+
+/venv
+__pycache__
+gettingstarted/static/
