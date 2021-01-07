@@ -32,7 +32,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 DEFAULT_BASE_URL = "http://localhost:8000"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+
 
 CORS_ALLOW_ALL_ORIGINS = True
 
