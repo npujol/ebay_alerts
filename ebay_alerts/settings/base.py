@@ -156,8 +156,8 @@ EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
 EBAY_APPID = env("EBAY_APPID")
 
 
-CELERY_BROKER_URL = "redis://redis:6379"
-CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_BROKER_URL = env("REDIS_URL", default="redis://redis:6379")
+CELERY_RESULT_BACKEND = env("REDIS_URL", default="redis://redis:6379")
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
