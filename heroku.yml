@@ -7,8 +7,6 @@ setup:
 build:
   docker:
     web: Dockerfile
-    worker: Dockerfile.worker
-
   config:
     RAILS_ENV: development
     FOO: bar
