@@ -18,8 +18,11 @@ RUN poetry config virtualenvs.create false \
 
 COPY . /code/
 
-RUN python manage.py collectstatic
+RUN touch ebay_alerts/settings/.env
 
+ENV SECRET_KEY "default"
+RUN python manage.py collectstatic
 # Run the image as a non-root user
 RUN adduser --disabled-password --gecos '' myuser
 USER myuser
+

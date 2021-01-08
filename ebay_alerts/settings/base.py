@@ -91,7 +91,7 @@ WSGI_APPLICATION = "ebay_alerts.wsgi.application"
 
 DATABASES = {
     # read os.environ['DATABASE_URL'] and raises ImproperlyConfigured exception if not found
-    "default": env.db()
+    "default": env.db(default="sqlite://:memory:")
 }
 
 
@@ -150,10 +150,10 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = env("EMAIL_USERNAME")
-EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
+EMAIL_HOST_USER = env("EMAIL_USERNAME", default="email")
+EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD", default="password")
 
-EBAY_APPID = env("EBAY_APPID")
+EBAY_APPID = env("EBAY_APPID", default="ebay_appid")
 
 
 CELERY_BROKER_URL = env("REDIS_URL", default="redis://redis:6379")
