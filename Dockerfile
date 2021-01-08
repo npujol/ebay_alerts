@@ -1,6 +1,7 @@
 FROM python:3.9.1
 
 ENV PYTHONUNBUFFERED 1
+
 RUN mkdir /code
 
 # System deps:
@@ -18,3 +19,7 @@ RUN poetry config virtualenvs.create false \
 COPY . /code/
 
 RUN python manage.py collectstatic
+
+# Run the image as a non-root user
+RUN adduser --disabled-password --gecos '' myuser
+USER myuser
