@@ -12,7 +12,7 @@ release:
     - python /code/manage.py migrate --noinput
   image: web
 run:
-  web: gunicorn ebay_alerts.wsgi:application --bind 0.0.0.0:8000 --reload -t300
+  web: gunicorn ebay_alerts.wsgi:application --bind 0.0.0.0:$PORT --reload -t300
   worker:
     command:
       -  celery -A ebay_alerts worker -l info
