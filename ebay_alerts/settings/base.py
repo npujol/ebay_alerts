@@ -147,11 +147,11 @@ SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False}
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = env("EMAIL_USERNAME", default="email")
-EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD", default="password")
+EMAIL_HOST_USER = env("SENDGRID_USERNAME", default="email")
+EMAIL_HOST_PASSWORD = env("SENDGRID_PASSWORD", default="password")
 
 EBAY_APPID = env("EBAY_APPID", default="ebay_appid")
 
