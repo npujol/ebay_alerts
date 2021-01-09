@@ -29,6 +29,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path("/", RedirectView.as_view(pattern_name="schema-swagger-ui"))
     path("api/", include("apps.alerts.urls", namespace="alerts")),
     url(
         r"^api/swagger(?P<format>\.json|\.yaml)$",
