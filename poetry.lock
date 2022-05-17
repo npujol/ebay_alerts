@@ -239,7 +239,7 @@ python-versions = "*"
 
 [[package]]
 name = "django"
-version = "3.1.5"
+version = "3.1.14"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -774,7 +774,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.1"
-content-hash = "630e9b885fa3201f1de4030d4e8bf0a2fb9311e3e98fd7b21a03c9a3bea8c864"
+content-hash = "f789e0725c6722f5d3bbd424546004192f641ac0b4dd3fa62ee4363c50299177"
 
 [metadata.files]
 amqp = [
@@ -848,8 +848,8 @@ distlib = [
     {file = "distlib-0.3.1.zip", hash = "sha256:edf6116872c863e1aa9d5bb7cb5e05a022c519a4594dc703843343a9ddd9bff1"},
 ]
 django = [
-    {file = "Django-3.1.5-py3-none-any.whl", hash = "sha256:efa2ab96b33b20c2182db93147a0c3cd7769d418926f9e9f140a60dca7c64ca9"},
-    {file = "Django-3.1.5.tar.gz", hash = "sha256:2d78425ba74c7a1a74b196058b261b9733a8570782f4e2828974777ccca7edf7"},
+    {file = "Django-3.1.14-py3-none-any.whl", hash = "sha256:0fabc786489af16ad87a8c170ba9d42bfd23f7b699bd5ef05675864e8d012859"},
+    {file = "Django-3.1.14.tar.gz", hash = "sha256:72a4a5a136a214c39cf016ccdd6b69e2aa08c7479c66d93f3a9b5e4bb9d8a347"},
 ]
 django-celery-results = [
     {file = "django_celery_results-2.0.0-py2.py3-none-any.whl", hash = "sha256:f82280a9a25c44048b9e64ae4d47ade7d522c8221304b0e25388080021b95468"},
