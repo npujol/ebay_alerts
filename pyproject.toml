@@ -6,7 +6,7 @@ authors = ["npujol <naivy.luna@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "3.9.1"
-Django = "^3.1.14"
+Django = "^3.2.24"
 django-environ = "^0.4.5"
 whitenoise = "^5.2.0"
 gunicorn = "^20.0.4"
