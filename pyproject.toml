@@ -22,7 +22,7 @@ django-cors-headers = "^3.6.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.9.3"
-black = "^20.8b1"
+black = "^24.3"
 flake8 = "^3.8.4"
 
 [build-system]
